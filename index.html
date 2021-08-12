@@ -5,6 +5,7 @@
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://fonts.googleapis.com/css?family=Creepster" rel="stylesheet">
    <title>Zombie Survival</title>
    <style>
       * {
@@ -70,6 +71,7 @@
       const KEY_PISTOL = 'Digit1'
       const KEY_SHOTGUN = 'Digit2'
       const KEY_UZI = 'Digit3'
+      const KEY_CANNON = 'Digit4'
 
       const keys = {}
 
@@ -150,7 +152,20 @@
             autofire: true,
             rate: 0.05,
             inaccuracy: 0.2,
-            bulletSize: 6
+            bulletSize: 3
+         },
+         {
+            name: 'cannon',
+            color: '#ff0',
+            width: 30,
+            height: 23,
+            spray: 1,
+            damage: 10000,
+            audio: setAudio('cannon', 'mp3', 0.8),
+            autofire: true,
+            rate: 2,
+            inaccuracy: 0.2,
+            bulletSize: 20
          }
       ]
 
@@ -378,6 +393,40 @@
             }
          }
 
+         hands() {
+            // for (let i = 0; i < 3; i++) {
+            //    particles.push(
+            //       new Particle(
+            //          this.x + (Math.cos(this.angle)) * (this.radius - 10),
+            //          this.y + (Math.sin(this.angle)) * (this.radius - 10),
+            //          Math.random() * 8,
+            //          '#f00',
+            //          {
+            //             x: (Math.random() - 0.5) * (Math.random() * 8),
+            //             y: (Math.random() - 0.5) * (Math.random() * 8),
+            //          }
+            //       )
+            //    )
+            // }
+
+            // for (let x = -1; x <= 1; x += 2) {
+
+            //    // ctx.strokeStyle = 'gray'
+            //    ctx.fillStyle = '#f00'
+            //    ctx.beginPath()
+            //    ctx.arc(
+            //       this.x + (Math.cos(this.angle)) * (this.radius + 10),
+            //       this.y + (Math.sin(this.angle)) * (this.radius + 10),
+            //       this.radius / 4,
+            //       0,
+            //       2 * Math.PI
+            //    )
+            //    ctx.fill()
+            //    ctx.stroke()
+
+            // }
+         }
+
          safeZone() {
             ctx.strokeStyle = '#000'
             ctx.beginPath()
@@ -393,6 +442,8 @@
                this.weapons = 1
             } else if (KEY_UZI in keys) {
                this.weapons = 2
+            } else if (KEY_CANNON in keys) {
+               this.weapons = 3
             }
 
             ctx.save()
@@ -415,6 +466,7 @@
             ctx.restore()
 
             this.eyes()
+            this.hands()
             this.gun()
 
          }
@@ -433,6 +485,8 @@
             this.radiusStart = 0
             this.life = life
             this.type = type
+            this.currentLife = this.life
+            this.sizeBarHP = 40
          }
 
          update() {
@@ -483,8 +537,26 @@
             }
          }
 
+         hp() {
+            ctx.save()
+            ctx.fillStyle = 'red'
+            ctx.fillRect(this.x - (this.sizeBarHP / 2), this.y - this.radiusStart - 10, this.sizeBarHP, 4)
+            ctx.restore()
+
+            ctx.save()
+            ctx.fillStyle = 'green'
+            ctx.fillRect(this.x - (this.sizeBarHP / 2), this.y - this.radiusStart - 10, (this.currentLife / this.life) * this.sizeBarHP, 4)
+            ctx.restore()
+
+            // ctx.save()
+            // ctx.fillStyle = '#fff'
+            // ctx.fillText(`${Math.floor((this.currentLife / this.life) * 100)}%`, this.x - 11, this.y - this.radiusStart - 10)
+            // ctx.restore()
+         }
+
          draw() {
 
+            ctx.save()
             ctx.beginPath()
             // ctx.shadowColor = 'rgba(0,0,0, 0.3)';
             ctx.strokeStyle = 'gray'
@@ -496,8 +568,9 @@
             ctx.stroke()
             ctx.lineWidth = 1
             ctx.fill()
+            ctx.restore()
 
-
+            this.hp()
             this.eyes()
          }
 
@@ -613,14 +686,14 @@
 
          ctx.save()
          ctx.fillStyle = '#fff'
-         ctx.font = '30px creepster'
-         ctx.fillText(`Recorde: ${localStorage.getItem('score') ? localStorage.getItem('score') : 0}`, 30, 35)
+         ctx.font = '35px creepster'
+         ctx.fillText(`Recorde: ${localStorage.getItem('score') ? localStorage.getItem('score') : 0}`, 30, 40)
          ctx.restore()
 
          ctx.save()
          ctx.fillStyle = '#fff'
-         ctx.font = '30px creepster'
-         ctx.fillText(`Pontuação: ${score}`, 30, 70)
+         ctx.font = '35px creepster'
+         ctx.fillText(`Pontuação: ${score}`, 30, 80)
          ctx.restore()
 
          // if (autofire && frame % weapons[player.weapons].rate === 0 && weapons[player.weapons].autofire) {
@@ -648,6 +721,7 @@
             if (!player.isDead && !shooting) {
 
                shooting = true
+
 
                let angle = Math.atan2(mouse.y - player.y, mouse.x - player.x)
 
@@ -722,9 +796,10 @@
 
                if (dist < zombie.radiusStart + bullet.radius) {
 
-                  zombie.life -= weapons[player.weapons].damage
+                  // zombie.currentLife -= weapons[player.weapons].damage
+                  zombie.currentLife = weapons[player.weapons].damage > zombie.currentLife ? 0 : zombie.currentLife - weapons[player.weapons].damage
 
-                  if (zombie.life && zombie.life >= 10) {
+                  if (zombie.currentLife && zombie.currentLife >= 10) {
 
                      zombieHitAudio.currentTime = 0
                      zombieHitAudio.play()
@@ -733,8 +808,8 @@
                         for (let i = 0; i < 3; i++) {
                            particles.push(
                               new Particle(
-                                 bullet.x,
-                                 bullet.y,
+                                 zombie.x,
+                                 zombie.y,
                                  Math.random() * 8,
                                  zombie.color,
                                  {
@@ -748,8 +823,8 @@
                         for (let i = 0; i < 15; i++) {
                            particles.push(
                               new Particle(
-                                 bullet.x,
-                                 bullet.y,
+                                 zombie.x,
+                                 zombie.y,
                                  Math.random() * 4,
                                  zombie.color,
                                  {
@@ -766,8 +841,8 @@
                      for (let i = 0; i < zombie.radius * 2; i++) {
                         particles.push(
                            new Particle(
-                              bullet.x,
-                              bullet.y,
+                              zombie.x,
+                              zombie.y,
                               Math.random() * 2,
                               '#f00',
                               {
