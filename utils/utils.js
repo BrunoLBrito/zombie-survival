@@ -33,3 +33,44 @@ function rand(min, max) {
 	// return Math.floor(Math.random() * (max - min + 1) - min)
 	return Math.floor(Math.random() * (max + 1 - min) + min)
 }
+
+// Salvar melhor pontução no localStorage
+function saveBestScore(score) {
+	if (localStorage.getItem('score') < score) {
+		localStorage.setItem('score', score)
+	}
+}
+
+// Spawn de zombis, exceto no safezone do player
+function spawnZombies(zombie, typeZombie, timeSpawn) {
+	setInterval(() => {
+		if (zombies.length < totalZombie) {
+			function collideRandom() {
+				let x = rand(0, canvas.width)
+				let y = rand(0, canvas.height)
+
+				const dist = Math.hypot(player.x - x, player.y - y)
+
+				if (dist < player.safezoneRadius + zombie.radius) {
+					collideRandom()
+				} else {
+					if (zombie.name === typeZombie) {
+						zombies.push(
+							new Zombie(
+								x,
+								y,
+								zombie.radius,
+								zombie.color,
+								zombie.speed,
+								zombie.eyes,
+								zombie.life,
+								zombie.name
+							)
+						)
+					}
+				}
+			}
+			collideRandom()
+		}
+	}, timeSpawn)
+}
