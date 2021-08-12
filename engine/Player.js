@@ -12,7 +12,7 @@ class Player {
 		this.isDead = false
 
 		this.safezoneRadius = 300
-		this.shooting = false
+		this.pickup = 0
 	}
 
 	update() {
@@ -60,45 +60,6 @@ class Player {
 		}
 	}
 
-	shoot() {
-		if (!this.isDead && !this.shooting) {
-			this.shooting = true
-
-			let angle = Math.atan2(mouse.y - this.y, mouse.x - this.x)
-
-			angle += (Math.random() * weapons[this.weapons].inaccuracy) / 2
-
-			weapons[this.weapons].audio.currentTime = 0
-			weapons[this.weapons].audio.play()
-
-			for (
-				let i = -(weapons[this.weapons].spray - 1) / 2;
-				i <= (weapons[this.weapons].spray - 1) / 2;
-				i++
-			) {
-				const velocity = {
-					x: Math.cos(angle + i / 10) * 30,
-					y: Math.sin(angle + i / 10) * 30,
-				}
-
-				bullets.push(
-					new Bullet(
-						this.x,
-						this.y,
-						weapons[this.weapons].bulletSize,
-						'#000',
-						angle,
-						velocity
-					)
-				)
-			}
-
-			setTimeout(() => {
-				this.shooting = false
-			}, weapons[this.weapons].rate * 1000)
-		}
-	}
-
 	hands() {
 		// for (let i = 0; i < 3; i++) {
 		//    particles.push(
@@ -139,26 +100,26 @@ class Player {
 
 	gun() {
 		if (KEY_PISTOL in keys) {
-			this.weapons = 0
+			this.pickup = 0
 		} else if (KEY_SHOTGUN in keys) {
-			this.weapons = 1
+			this.pickup = 1
 		} else if (KEY_UZI in keys) {
-			this.weapons = 2
+			this.pickup = 2
 		} else if (KEY_CANNON in keys) {
-			this.weapons = 3
+			this.pickup = 3
 		}
 
-		ctx.save()
-		ctx.fillStyle = weapons[this.weapons].color
-		ctx.translate(this.x, this.y)
-		ctx.rotate(this.angle)
-		ctx.fillRect(
-			this.radius - 2,
-			-weapons[this.weapons].height / 2,
-			weapons[this.weapons].width,
-			weapons[this.weapons].height
-		)
-		ctx.restore()
+		// ctx.save()
+		// ctx.fillStyle = weapons[this.weapons].color
+		// ctx.translate(this.x, this.y)
+		// ctx.rotate(this.angle)
+		// ctx.fillRect(
+		// 	this.radius - 2,
+		// 	-weapons[this.weapons].height / 2,
+		// 	weapons[this.weapons].width,
+		// 	weapons[this.weapons].height
+		// )
+		// ctx.restore()
 	}
 
 	draw() {

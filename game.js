@@ -37,6 +37,7 @@ const mouse = {
 const zombies = []
 const bullets = []
 const particles = []
+const weaponsNo = []
 const bloods = []
 const totalZombie = 25
 const timeSpawnZombie = [500, 2000, 5000, 10000, 60000]
@@ -248,6 +249,18 @@ function saveBestScore(score) {
 
 const player = new Player(canvas.width / 2, canvas.height / 2, 15, '#00f')
 
+const pistol = new Weapon(weapons[0])
+weaponsNo.push(pistol)
+
+const shotgun = new Weapon(weapons[1])
+weaponsNo.push(shotgun)
+
+const uzi = new Weapon(weapons[2])
+weaponsNo.push(uzi)
+
+const cannon = new Weapon(weapons[3])
+weaponsNo.push(cannon)
+
 // function drawShadow(alpha) {
 //    let gradient = ctx.createRadialGradient(
 //       player.x + canvasbg.width / 2,
@@ -312,7 +325,7 @@ function run() {
 	// }
 
 	if (mouse.click) {
-		player.shoot()
+		weaponsNo[player.pickup].shoot()
 	}
 
 	particles.forEach((particle, index) => {
@@ -352,8 +365,13 @@ function run() {
 	// drawShadow(1)
 
 	if (!player.isDead) {
-		player.draw()
 		player.update()
+		player.draw()
+	}
+
+	if (!player.isDead) {
+		weaponsNo[player.pickup].update()
+		weaponsNo[player.pickup].draw()
 	}
 
 	// Hit e morte do zombie
@@ -362,11 +380,7 @@ function run() {
 			const dist = Math.hypot(zombie.x - bullet.x, zombie.y - bullet.y)
 
 			if (dist < zombie.radiusStart + bullet.radius) {
-				// zombie.currentLife -= weapons[player.weapons].damage
-				zombie.currentLife =
-					weapons[player.weapons].damage > zombie.currentLife
-						? 0
-						: zombie.currentLife - weapons[player.weapons].damage
+				zombie.currentLife -= weaponsNo[player.pickup].damage
 
 				if (zombie.currentLife && zombie.currentLife >= 10) {
 					zombieHitAudio.currentTime = 0
