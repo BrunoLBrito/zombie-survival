@@ -37,6 +37,11 @@ class Player {
 		} else if (KEY_DOWN in keys) {
 			this.y += this.speed
 		}
+
+		// if (KEY_RELOAD in keys) {
+		// 	weaponsNo[0].reload()
+		// 	console.log(weaponsNo[0].name)
+		// }
 	}
 
 	eyes() {

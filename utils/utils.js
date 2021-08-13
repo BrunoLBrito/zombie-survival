@@ -41,6 +41,14 @@ function saveBestScore(score) {
 	}
 }
 
+// Carrgar image
+function imageSprite(image) {
+	let img = new Image()
+	img.src = `../sprites/${image}.png`
+
+	return img
+}
+
 // Spawn de zombis, exceto no safezone do player
 function spawnZombies(zombie, typeZombie, timeSpawn) {
 	setInterval(() => {

@@ -5,6 +5,7 @@ class Weapon {
 		})
 
 		this.isShooting = false
+		this.isReloading = false
 		this.angle = 0
 	}
 
@@ -13,7 +14,7 @@ class Weapon {
 	}
 
 	shoot() {
-		if (!player.isDead && !this.shooting) {
+		if (!player.isDead && !this.shooting && this.inMag > 0) {
 			this.shooting = true
 
 			// let angle = Math.atan2(mouse.y - this.y, mouse.x - this.x)
@@ -41,9 +42,41 @@ class Weapon {
 				)
 			}
 
+			this.inMag -= 1
+			console.log(`${this.capacity} / ${this.ammo}`)
+
 			setTimeout(() => {
 				this.shooting = false
 			}, this.rate * 1000)
+		}
+	}
+
+	reload() {
+		if (!this.isReloading) {
+			if (this.inMag === this.capacity) return
+
+			if (this.ammo > 0) {
+				reloadSound.currentTime = 0
+				reloadSound.play()
+			} else {
+				console.log('vazio')
+				outOfAmmoSound.currentTime = 0
+				outOfAmmoSound.play()
+			}
+
+			console.log('reload')
+			this.isReloading = true
+
+			setTimeout(() => {
+				if (this.ammo < this.capacity - this.inMag) {
+					this.inMag += this.ammo
+					this.ammo = 0
+				} else {
+					this.ammo -= this.capacity - this.inMag
+					this.inMag = this.capacity
+				}
+				this.isReloading = false
+			}, 2000)
 		}
 	}
 

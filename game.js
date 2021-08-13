@@ -8,6 +8,8 @@ canvas.style.cursor = 'crosshair'
 const zombieHitAudio = setAudio('zombie-hit', 'mp3', 0.2)
 const playerDeadSound = setAudio('dead-player', 'mp3', 0.2)
 const zombiesBiteSound = setAudio('zombies-bite', 'mp3', 0.5)
+const reloadSound = setAudio('reload', 'mp3', 0.5)
+const outOfAmmoSound = setAudio('outofammo', 'wav', 0.5)
 
 const KEY_LEFT = 'KeyA'
 const KEY_RIGHT = 'KeyD'
@@ -18,6 +20,8 @@ const KEY_PISTOL = 'Digit1'
 const KEY_SHOTGUN = 'Digit2'
 const KEY_UZI = 'Digit3'
 const KEY_CANNON = 'Digit4'
+
+const KEY_RELOAD = 'KeyR'
 
 const keys = {}
 
@@ -59,6 +63,7 @@ for (let i = 0; i < zombiesTypes.length; i++) {
 	spawnZombies(zombiesTypes[i], zombiesTypes[i].name, timeSpawnZombie[i])
 }
 
+// Removendo sprite de sangue depois de 200ms desde que a quantidade seja maior que 20
 setInterval(() => {
 	if (bloods.length > 20) {
 		bloods.shift()
@@ -75,8 +80,17 @@ for (let i = 0; i < weapons.length; i++) {
 function run() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-	// console.log({ particles: particles.length, bullets: bullets.length, zombies: zombies.length })
 	drawGrid(ctx, 'rgba(102,153,51, 1)', 200, 200)
+
+	HUB.draw(
+		weaponsNo[player.pickup].inMag,
+		weaponsNo[player.pickup].ammo,
+		weaponsNo[player.pickup].image
+	)
+
+	if (KEY_RELOAD in keys) {
+		weaponsNo[player.pickup].reload()
+	}
 
 	ctx.save()
 	ctx.fillStyle = '#fff'
