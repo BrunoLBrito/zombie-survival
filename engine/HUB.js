@@ -9,17 +9,17 @@ class HUB {
 	}
 
 	static draw(inMag, ammo, image) {
-		ctx.drawImage(
-			image,
-			0,
-			0,
-			121,
-			121,
-			canvas.width - 121,
-			canvas.height - 170,
-			100,
-			100
-		)
+		// ctx.drawImage(
+		// 	image,
+		// 	0,
+		// 	0,
+		// 	121,
+		// 	121,
+		// 	canvas.width - 121,
+		// 	canvas.height - 170,
+		// 	100,
+		// 	100
+		// )
 
 		ctx.save()
 		ctx.fillStyle = '#fff'
