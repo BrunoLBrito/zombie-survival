@@ -86,23 +86,7 @@ let shield = new Item(
 	50
 )
 
-let shield2 = new Item(
-	imageSprite('shield-image'),
-	rand(0, canvas.width),
-	rand(0, canvas.height),
-	50
-)
-
-setInterval(() => {
-	items.push(
-		new Item(
-			imageSprite('shield-image'),
-			rand(0, canvas.width - 50),
-			rand(0, canvas.height - 50),
-			50
-		)
-	)
-}, 10000)
+let imageItem = imageSprite('shield-image')
 
 function run() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -372,4 +356,30 @@ function run() {
 	frame++
 }
 
-run()
+let loaded = 0
+let loading = false
+
+weapons.forEach(weapon => {
+	weapon.image.onload = () => {
+		loaded++
+	}
+})
+
+imageItem.onload = () => (loading = true)
+
+let loadTime = setInterval(() => {
+	if (loaded === 4 && imageItem) {
+		setInterval(() => {
+			items.push(
+				new Item(
+					imageSprite('shield-image'),
+					rand(0, canvas.width - 50),
+					rand(0, canvas.height - 50),
+					50
+				)
+			)
+		}, 10000)
+		run()
+		clearInterval(loadTime)
+	}
+}, 1000)
