@@ -41,7 +41,7 @@ function saveBestScore(score) {
 	}
 }
 
-// Carrgar image
+// Carregar image
 function imageSprite(image) {
 	let img = new Image()
 	img.src = `../sprites/${image}.png`

@@ -372,4 +372,6 @@ function run() {
 	frame++
 }
 
-document.addEventListener('DOMContentLoaded', run)
+setTimeout(() => {
+	run()
+}, 7000)
