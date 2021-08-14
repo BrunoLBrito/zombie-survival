@@ -5,14 +5,10 @@ class Blood {
 		this.image = new Image()
 		this.width = 150
 		this.height = 130
-		this.alpha = 0.8
+		this.alpha = 1
 		this.image.src = './sprites/blood.png'
 		this.frame = frame
 		this.size = size
-	}
-
-	update() {
-		// this.alpha -= 0.01
 	}
 
 	draw() {
@@ -32,7 +28,12 @@ class Blood {
 		ctx.restore()
 	}
 
+	update() {
+		// this.draw()
+		// this.alpha -= 0.01
+	}
+
 	destroy() {
-		bloods.splice(bloods.indexOf(this), 1)
+		bloods.shift()
 	}
 }

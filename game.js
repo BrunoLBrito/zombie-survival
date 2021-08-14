@@ -10,6 +10,7 @@ const playerDeadSound = setAudio('dead-player', 'mp3', 0.2)
 const zombiesBiteSound = setAudio('zombies-bite', 'mp3', 0.5)
 const reloadSound = setAudio('reload', 'mp3', 0.5)
 const outOfAmmoSound = setAudio('outofammo', 'wav', 0.5)
+const itemShieldSound = setAudio('item-shield-sound', 'mp3', 0.8)
 
 const KEY_LEFT = 'KeyA'
 const KEY_RIGHT = 'KeyD'
@@ -36,9 +37,11 @@ const zombies = []
 const bullets = []
 const particles = []
 const weaponsNo = []
+const items = []
 const bloods = []
 const totalZombie = 25
-const timeSpawnZombie = [500, 2000, 5000, 10000, 60000]
+let isGetItem = false
+const timeSpawnZombie = [500, 2000, 5000, 10000, 30000]
 
 let frame = 0
 let score = 0
@@ -76,6 +79,30 @@ const player = new Player(canvas.width / 2, canvas.height / 2, 15, '#00f')
 for (let i = 0; i < weapons.length; i++) {
 	weaponsNo.push(new Weapon(weapons[i]))
 }
+let shield = new Item(
+	imageSprite('shield-image'),
+	rand(0, canvas.width),
+	rand(0, canvas.height),
+	50
+)
+
+let shield2 = new Item(
+	imageSprite('shield-image'),
+	rand(0, canvas.width),
+	rand(0, canvas.height),
+	50
+)
+
+setInterval(() => {
+	items.push(
+		new Item(
+			imageSprite('shield-image'),
+			rand(0, canvas.width - 50),
+			rand(0, canvas.height - 50),
+			50
+		)
+	)
+}, 10000)
 
 function run() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -127,6 +154,13 @@ function run() {
 		blood.draw()
 	})
 
+	for (let i in items) {
+		items[i].update()
+		if (items[i]) {
+			items[i].draw()
+		}
+	}
+
 	for (let i in bullets) {
 		const bullet = bullets[i]
 
@@ -143,6 +177,8 @@ function run() {
 		}
 	}
 
+	player.shield()
+
 	for (let i in zombies) {
 		zombies[i].update()
 		zombies[i].draw()
@@ -157,6 +193,55 @@ function run() {
 		weaponsNo[player.pickup].update()
 		weaponsNo[player.pickup].draw()
 	}
+
+	zombies.forEach((zombie, indexZombie) => {
+		const dist = Math.hypot(zombie.x - player.x, zombie.y - player.y)
+
+		if (dist < zombie.radiusStart + 50 && player.isShield) {
+			bloods.push(new Blood(zombie.x, zombie.y, rand(0, 3), 70))
+
+			for (let i = 0; i < zombie.radius * 2; i++) {
+				particles.push(
+					new Particle(zombie.x, zombie.y, Math.random() * 2, '#f00', {
+						x: (Math.random() - 0.5) * (Math.random() * 8),
+						y: (Math.random() - 0.5) * (Math.random() * 8),
+					})
+				)
+			}
+
+			switch (zombie.type) {
+				case 'normal':
+					score += zombiesTypes[0].point
+					zombiesTypes[0].audio.currentTime = 0
+					zombiesTypes[0].audio.play()
+					break
+				case 'speed':
+					score += zombiesTypes[1].point
+					zombiesTypes[1].audio.currentTime = 0
+					zombiesTypes[1].audio.play()
+					break
+
+				case 'hulk':
+					score += zombiesTypes[2].point
+					zombiesTypes[2].audio.currentTime = 0
+					zombiesTypes[2].audio.play()
+					break
+
+				case 'boss':
+					score += zombiesTypes[3].point
+					zombiesTypes[3].audio.currentTime = 0
+					zombiesTypes[3].audio.play()
+					break
+				case 'ultra':
+					score += zombiesTypes[4].point
+					zombiesTypes[4].audio.currentTime = 0
+					zombiesTypes[4].audio.play()
+					break
+			}
+
+			zombie.destroy()
+		}
+	})
 
 	// Hit e morte do zombie
 	zombies.forEach((zombie, indexZombie) => {

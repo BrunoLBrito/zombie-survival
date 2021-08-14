@@ -13,7 +13,8 @@ const weapons = [
 		bulletSize: 2,
 		capacity: 15,
 		inMag: 15,
-		ammo: 50,
+		reloadTime: 2.0,
+		ammo: 9999, // default 50
 		image: imageSprite('weapon_pistol'),
 	},
 	{
@@ -30,7 +31,8 @@ const weapons = [
 		bulletSize: 3,
 		capacity: 6,
 		inMag: 6,
-		ammo: 30,
+		reloadTime: 2.0,
+		ammo: 9999, // default 30
 		image: imageSprite('weapon_shotgun'),
 	},
 	{
@@ -47,7 +49,8 @@ const weapons = [
 		bulletSize: 3,
 		capacity: 50,
 		inMag: 50,
-		ammo: 200,
+		reloadTime: 2.0,
+		ammo: 9999, // default 200
 		image: imageSprite('weapon_uzi'),
 	},
 	{
@@ -64,7 +67,8 @@ const weapons = [
 		bulletSize: 20,
 		capacity: 1,
 		inMag: 1,
-		ammo: 5,
+		reloadTime: 2.0,
+		ammo: 9999, // default 5
 		image: imageSprite('weapon_rpg'),
 	},
 ]

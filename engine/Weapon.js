@@ -14,7 +14,17 @@ class Weapon {
 	}
 
 	shoot() {
-		if (!player.isDead && !this.shooting && this.inMag > 0) {
+		if (this.inMag <= 0) {
+			this.reload()
+			return
+		}
+
+		if (
+			!player.isDead &&
+			!this.shooting &&
+			this.inMag > 0 &&
+			!this.isReloading
+		) {
 			this.shooting = true
 
 			// let angle = Math.atan2(mouse.y - this.y, mouse.x - this.x)
@@ -76,7 +86,7 @@ class Weapon {
 					this.inMag = this.capacity
 				}
 				this.isReloading = false
-			}, 2000)
+			}, this.reloadTime * 1000)
 		}
 	}
 

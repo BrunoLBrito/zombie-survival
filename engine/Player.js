@@ -13,6 +13,7 @@ class Player {
 
 		this.safezoneRadius = 300
 		this.pickup = 0
+		this.isShield = false
 	}
 
 	update() {
@@ -94,6 +95,34 @@ class Player {
 		//    ctx.fill()
 		//    ctx.stroke()
 		// }
+	}
+
+	shield() {
+		if (this.isShield) {
+			let innerColor = 'rgba(100, 145, 230, 1.0)'
+			let middleColor = 'rgba(100, 145, 230, 0.7)'
+			let outerColor = 'rgba(100, 145, 230, 0.5)'
+
+			let gradient = ctx.createRadialGradient(
+				this.x,
+				this.y,
+				0,
+				this.x,
+				this.y,
+				100
+			)
+
+			gradient.addColorStop(0.3, innerColor)
+			gradient.addColorStop(0.5, middleColor)
+			gradient.addColorStop(1.0, outerColor)
+
+			ctx.save()
+			ctx.beginPath()
+			ctx.fillStyle = gradient
+			ctx.arc(player.x, player.y, 50, 0, 2 * Math.PI)
+			ctx.fill()
+			ctx.restore()
+		}
 	}
 
 	safeZone() {
