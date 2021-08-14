@@ -9,28 +9,22 @@ class HUB {
 	}
 
 	static draw(inMag, ammo, image) {
-		setTimeout(() => {
-			ctx.drawImage(
-				image,
-				0,
-				0,
-				121,
-				121,
-				canvas.width - 121,
-				canvas.height - 170,
-				100,
-				100
-			)
+		ctx.drawImage(
+			image,
+			0,
+			0,
+			121,
+			121,
+			canvas.width - 121,
+			canvas.height - 170,
+			100,
+			100
+		)
 
-			ctx.save()
-			ctx.fillStyle = '#fff'
-			ctx.font = '20px sans-serif'
-			ctx.fillText(
-				`${inMag} / ${ammo}`,
-				canvas.width - 110,
-				canvas.height - 50
-			)
-			ctx.restore()
-		}, 5000)
+		ctx.save()
+		ctx.fillStyle = '#fff'
+		ctx.font = '20px sans-serif'
+		ctx.fillText(`${inMag} / ${ammo}`, canvas.width - 110, canvas.height - 50)
+		ctx.restore()
 	}
 }
