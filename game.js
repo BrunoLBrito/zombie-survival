@@ -372,4 +372,4 @@ function run() {
 	frame++
 }
 
-run()
+document.addEventListener('DOMContentLoaded', run)
