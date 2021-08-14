@@ -372,6 +372,4 @@ function run() {
 	frame++
 }
 
-setTimeout(() => {
-	run()
-}, 7000)
+run()
