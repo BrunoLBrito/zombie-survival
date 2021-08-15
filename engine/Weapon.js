@@ -47,7 +47,8 @@ class Weapon {
 						this.bulletSize,
 						'#000',
 						this.angle,
-						velocity
+						velocity,
+						this.damage
 					)
 				)
 			}

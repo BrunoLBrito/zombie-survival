@@ -43,6 +43,10 @@ class Zombie {
 		}
 	}
 
+	hurt(damage) {
+		this.currentLife -= damage
+	}
+
 	eyes() {
 		for (let x = -1; x <= 1; x += 2) {
 			ctx.save()
