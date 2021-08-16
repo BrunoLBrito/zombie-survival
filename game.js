@@ -150,8 +150,8 @@ function run() {
 	}
 
 	for (let i in zombies) {
-		// zombies[i].update()
-		// zombies[i].draw()
+		zombies[i].update()
+		zombies[i].draw()
 	}
 
 	if (!player.isDead) {
