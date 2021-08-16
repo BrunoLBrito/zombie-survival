@@ -14,6 +14,16 @@ class Bullet {
 		this.y += this.velocity.y
 
 		this.kill()
+
+		// Remove da memoria a bala assim que sair da tela
+		if (
+			this.x + this.radius < 0 ||
+			this.x > canvas.width - this.radius ||
+			this.y + this.radius < 0 ||
+			this.y > canvas.height - this.radius
+		) {
+			this.destroy()
+		}
 	}
 
 	kill() {
@@ -80,31 +90,23 @@ class Bullet {
 
 					switch (zombie.type) {
 						case 'normal':
-							score += zombiesTypes[0].point
-							zombiesTypes[0].audio.currentTime = 0
-							zombiesTypes[0].audio.play()
+							addPointsAndSoundPerZombie(zombiesTypes[0])
 							break
+
 						case 'speed':
-							score += zombiesTypes[1].point
-							zombiesTypes[1].audio.currentTime = 0
-							zombiesTypes[1].audio.play()
+							addPointsAndSoundPerZombie(zombiesTypes[1])
 							break
 
 						case 'hulk':
-							score += zombiesTypes[2].point
-							zombiesTypes[2].audio.currentTime = 0
-							zombiesTypes[2].audio.play()
+							addPointsAndSoundPerZombie(zombiesTypes[2])
 							break
 
 						case 'boss':
-							score += zombiesTypes[3].point
-							zombiesTypes[3].audio.currentTime = 0
-							zombiesTypes[3].audio.play()
+							addPointsAndSoundPerZombie(zombiesTypes[3])
 							break
+
 						case 'ultra':
-							score += zombiesTypes[4].point
-							zombiesTypes[4].audio.currentTime = 0
-							zombiesTypes[4].audio.play()
+							addPointsAndSoundPerZombie(zombiesTypes[4])
 							break
 					}
 

@@ -11,6 +11,18 @@ class Weapon {
 
 	update() {
 		this.angle = player.angle
+
+		this.commands()
+	}
+
+	commands() {
+		if (KEY_RELOAD in keys) {
+			this.reload()
+		}
+
+		if (mouse.click) {
+			this.shoot()
+		}
 	}
 
 	shoot() {

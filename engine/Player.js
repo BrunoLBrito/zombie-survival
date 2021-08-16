@@ -14,6 +14,9 @@ class Player {
 		this.safezoneRadius = 300
 		this.pickup = 0
 		this.isShield = false
+
+		this.image = imageSprite('player')
+		this.size = 40
 	}
 
 	update() {
@@ -21,9 +24,10 @@ class Player {
 
 		// ctx.moveTo(this.x, this.y)
 		// ctx.lineTo(mouse.x, mouse.y)
+		// ctx.stroke()
 
-		ctx.stroke()
 		this.move()
+		this.shield()
 	}
 
 	move() {
@@ -163,10 +167,26 @@ class Player {
 		ctx.beginPath()
 		ctx.fillStyle = this.color
 		ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI)
-		ctx.fill()
+		// ctx.fill()
 		ctx.restore()
 
-		this.eyes()
+		ctx.save()
+		ctx.translate(this.x, this.y)
+		ctx.rotate(this.angle)
+		ctx.drawImage(
+			this.image,
+			0,
+			0,
+			this.image.width,
+			this.image.height,
+			-this.size / 2,
+			-this.size / 2,
+			this.size,
+			this.size
+		)
+		ctx.restore()
+
+		// this.eyes()
 		this.hands()
 		this.gun()
 	}

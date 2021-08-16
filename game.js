@@ -74,7 +74,7 @@ setInterval(() => {
 	}
 }, 200)
 
-const player = new Player(canvas.width / 2, canvas.height / 2, 15, '#00f')
+const player = new Player(canvas.width / 2, canvas.height / 2, 20, '#00f')
 
 // Mapeando armas para o array weaponsNo
 for (let i = 0; i < weapons.length; i++) {
@@ -98,14 +98,11 @@ function run() {
 	drawGrid(ctx, 'rgba(102,153,51, 1)', 200, 200)
 
 	HUB.draw(
+		weaponsNo[player.pickup].name,
 		weaponsNo[player.pickup].inMag,
 		weaponsNo[player.pickup].ammo,
 		weaponsNo[player.pickup].image
 	)
-
-	if (KEY_RELOAD in keys) {
-		weaponsNo[player.pickup].reload()
-	}
 
 	ctx.save()
 	ctx.fillStyle = '#fff'
@@ -124,10 +121,6 @@ function run() {
 	ctx.font = '35px creepster'
 	ctx.fillText(`Pontuação: ${score}`, 30, 80)
 	ctx.restore()
-
-	if (mouse.click) {
-		weaponsNo[player.pickup].shoot()
-	}
 
 	particles.forEach(particle => {
 		if (particle.alpha <= 0) {
@@ -154,35 +147,22 @@ function run() {
 
 		bullet.update()
 		bullet.draw()
-
-		if (
-			bullet.x + bullet.radius < 0 ||
-			bullet.x > canvas.width - bullet.radius ||
-			bullet.y + bullet.radius < 0 ||
-			bullet.y > canvas.height - bullet.radius
-		) {
-			bullet.destroy()
-		}
 	}
 
-	player.shield()
-
 	for (let i in zombies) {
-		zombies[i].update()
-		zombies[i].draw()
+		// zombies[i].update()
+		// zombies[i].draw()
 	}
 
 	if (!player.isDead) {
 		player.update()
 		player.draw()
-	}
 
-	if (!player.isDead) {
 		weaponsNo[player.pickup].update()
 		weaponsNo[player.pickup].draw()
 	}
 
-	zombies.forEach((zombie, indexZombie) => {
+	zombies.forEach(zombie => {
 		const dist = Math.hypot(zombie.x - player.x, zombie.y - player.y)
 
 		if (dist < zombie.radiusStart + 50 && player.isShield) {
@@ -199,31 +179,23 @@ function run() {
 
 			switch (zombie.type) {
 				case 'normal':
-					score += zombiesTypes[0].point
-					zombiesTypes[0].audio.currentTime = 0
-					zombiesTypes[0].audio.play()
+					addPointsAndSoundPerZombie(zombiesTypes[0])
 					break
+
 				case 'speed':
-					score += zombiesTypes[1].point
-					zombiesTypes[1].audio.currentTime = 0
-					zombiesTypes[1].audio.play()
+					addPointsAndSoundPerZombie(zombiesTypes[1])
 					break
 
 				case 'hulk':
-					score += zombiesTypes[2].point
-					zombiesTypes[2].audio.currentTime = 0
-					zombiesTypes[2].audio.play()
+					addPointsAndSoundPerZombie(zombiesTypes[2])
 					break
 
 				case 'boss':
-					score += zombiesTypes[3].point
-					zombiesTypes[3].audio.currentTime = 0
-					zombiesTypes[3].audio.play()
+					addPointsAndSoundPerZombie(zombiesTypes[3])
 					break
+
 				case 'ultra':
-					score += zombiesTypes[4].point
-					zombiesTypes[4].audio.currentTime = 0
-					zombiesTypes[4].audio.play()
+					addPointsAndSoundPerZombie(zombiesTypes[4])
 					break
 			}
 
@@ -231,108 +203,8 @@ function run() {
 		}
 	})
 
-	// Hit e morte do zombie
-	// zombies.forEach((zombie, indexZombie) => {
-	// 	bullets.forEach((bullet, indexBullet) => {
-	// 		const dist = Math.hypot(zombie.x - bullet.x, zombie.y - bullet.y)
-
-	// 		if (dist < zombie.radiusStart + bullet.radius) {
-	// 			// zombie.currentLife -= weaponsNo[player.pickup].damage
-	// 			zombie.hurt(weaponsNo[player.pickup].damage)
-
-	// 			if (zombie.currentLife && zombie.currentLife >= 10) {
-	// 				zombieHitAudio.currentTime = 0
-	// 				zombieHitAudio.play()
-
-	// 				if (zombie.type == 'ultra') {
-	// 					for (let i = 0; i < 3; i++) {
-	// 						particles.push(
-	// 							new Particle(
-	// 								zombie.x,
-	// 								zombie.y,
-	// 								Math.random() * 8,
-	// 								zombie.color,
-	// 								{
-	// 									x: (Math.random() - 0.5) * (Math.random() * 8),
-	// 									y: (Math.random() - 0.5) * (Math.random() * 8),
-	// 								}
-	// 							)
-	// 						)
-	// 					}
-	// 				} else {
-	// 					for (let i = 0; i < 15; i++) {
-	// 						particles.push(
-	// 							new Particle(
-	// 								zombie.x,
-	// 								zombie.y,
-	// 								Math.random() * 4,
-	// 								zombie.color,
-	// 								{
-	// 									x: (Math.random() - 0.5) * (Math.random() * 8),
-	// 									y: (Math.random() - 0.5) * (Math.random() * 8),
-	// 								}
-	// 							)
-	// 						)
-	// 					}
-	// 				}
-	// 			} else {
-	// 				for (let i = 0; i < zombie.radius * 2; i++) {
-	// 					particles.push(
-	// 						new Particle(
-	// 							zombie.x,
-	// 							zombie.y,
-	// 							Math.random() * 2,
-	// 							'#f00',
-	// 							{
-	// 								x: (Math.random() - 0.5) * (Math.random() * 8),
-	// 								y: (Math.random() - 0.5) * (Math.random() * 8),
-	// 							}
-	// 						)
-	// 					)
-	// 				}
-
-	// 				bloods.push(new Blood(zombie.x, zombie.y, rand(0, 3), 70))
-
-	// 				switch (zombie.type) {
-	// 					case 'normal':
-	// 						score += zombiesTypes[0].point
-	// 						zombiesTypes[0].audio.currentTime = 0
-	// 						zombiesTypes[0].audio.play()
-	// 						break
-	// 					case 'speed':
-	// 						score += zombiesTypes[1].point
-	// 						zombiesTypes[1].audio.currentTime = 0
-	// 						zombiesTypes[1].audio.play()
-	// 						break
-
-	// 					case 'hulk':
-	// 						score += zombiesTypes[2].point
-	// 						zombiesTypes[2].audio.currentTime = 0
-	// 						zombiesTypes[2].audio.play()
-	// 						break
-
-	// 					case 'boss':
-	// 						score += zombiesTypes[3].point
-	// 						zombiesTypes[3].audio.currentTime = 0
-	// 						zombiesTypes[3].audio.play()
-	// 						break
-	// 					case 'ultra':
-	// 						score += zombiesTypes[4].point
-	// 						zombiesTypes[4].audio.currentTime = 0
-	// 						zombiesTypes[4].audio.play()
-	// 						break
-	// 				}
-
-	// 				zombie.destroy()
-	// 			}
-	// 			bullet.destroy()
-	// 		}
-	// 	})
-	// })
-
 	// Morte e hit no player
-
-	zombies.forEach((zombie, indexZombie) => {
+	zombies.forEach(zombie => {
 		const dist = Math.hypot(player.x - zombie.x, player.y - zombie.y)
 
 		if (dist < zombie.radiusStart + player.radius) {

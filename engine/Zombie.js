@@ -13,6 +13,8 @@ class Zombie {
 		this.type = type
 		this.currentLife = this.life
 		this.sizeBarHP = 40
+
+		this.image = imageSprite('zombie')
 	}
 
 	update() {
@@ -114,6 +116,22 @@ class Zombie {
 		ctx.lineWidth = 1
 		ctx.fill()
 		ctx.restore()
+
+		// ctx.save()
+		// ctx.translate(this.x, this.y)
+		// ctx.rotate(this.angle)
+		// ctx.drawImage(
+		// 	this.image,
+		// 	0,
+		// 	0,
+		// 	this.image.width,
+		// 	this.image.height,
+		// 	-40 / 2,
+		// 	-40 / 2,
+		// 	40,
+		// 	40
+		// )
+		// ctx.restore()
 
 		this.hp()
 		this.eyes()

@@ -49,6 +49,13 @@ function imageSprite(image) {
 	return img
 }
 
+// Adicionar pontos e audio pela morte do tipo de zumbis
+function addPointsAndSoundPerZombie(typeZombie) {
+	score += typeZombie.point
+	typeZombie.audio.currentTime = 0
+	typeZombie.audio.play()
+}
+
 // Spawn de zombis, exceto no safezone do player
 function spawnZombies(zombie, typeZombie, timeSpawn) {
 	setInterval(() => {
