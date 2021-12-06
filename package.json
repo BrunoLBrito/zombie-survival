@@ -1,0 +1,19 @@
+{
+  "name": "zombie-survival",
+  "version": "2.0.0",
+  "description": "Survive hungry zombie attacks",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrunoLBrito/zombie-survival.git"
+  },
+  "author": "Bruno Brito <bruno-lucas@msn.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BrunoLBrito/zombie-survival/issues"
+  },
+  "homepage": "https://zombie-survival-game.netlify.app/"
+}
